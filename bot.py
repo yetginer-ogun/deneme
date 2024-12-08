@@ -14,7 +14,19 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    await message.channel.send(message.content)
+    if message.author == bot.user:
+        return
+
+    if message.content.startswith(bot.command_prefix):
+        await bot.process_commands(message)
+    else:
+        await message.channel.send(message.content)
+
+@bot.event
+async def on_member_join(member):
+    # Karşılama mesajı gönderme
+    for channel in member.guild.text_channels:
+        await channel.send(f" Hoş geldiniz: , {member.mention}!")
 
 @bot.command()
 async def start(ctx):
